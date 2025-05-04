@@ -10,6 +10,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<EstudiantesController>();
 
+// En Program.cs (de tu proyecto API)
+// Agrega esta línea en la configuración
+builder.Configuration["ConexionBD"] = builder.Configuration.GetConnectionString("DefaultConnection");
+
 // En Program.cs
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
