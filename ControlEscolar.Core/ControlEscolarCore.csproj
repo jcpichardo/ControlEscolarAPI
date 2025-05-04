@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\DatabaseScripts\StoredProcedures\" />
+    <Folder Include="Data\DatabaseScripts\Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="8.0.2" />
+    <PackageReference Include="NLog" Version="5.4.0" />
+    <PackageReference Include="Npgsql" Version="9.0.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
+  </ItemGroup>
+
+</Project>
