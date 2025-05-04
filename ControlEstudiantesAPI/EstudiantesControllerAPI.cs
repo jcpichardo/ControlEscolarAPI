@@ -10,6 +10,12 @@ namespace ControlEstudiantesAPI
     {
         private readonly EstudiantesController _estudiantesController;
 
+
+        public EstudiantesControllerAPI(EstudiantesController estudiantesController)
+        {
+            _estudiantesController = estudiantesController;
+        }
+
         /// <summary>
         /// Obtiene todos los estudiantes con filtros opcionales
         /// </summary>
