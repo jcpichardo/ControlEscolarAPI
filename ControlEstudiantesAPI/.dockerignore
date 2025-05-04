@@ -28,3 +28,7 @@ README.md
 ControlEscolar/
 ControlEscolar.Tests/
 # Cualquier otro proyecto específico de Windows que no sea necesario para la API
+
+# Ignorar archivos de desarrollo
+**/*.user
+**/*.suo

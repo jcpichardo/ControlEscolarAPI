@@ -2,17 +2,16 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copiar toda la solución
-COPY . ./
+# Copiar solo los proyectos necesarios (API y Core)
+COPY ControlEstudiantesAPI ./ControlEstudiantesAPI
+COPY ControlEscolarCore ./ControlEscolarCore
+COPY *.sln ./
 
-# Restaurar dependencias
-RUN dotnet restore
+# Restaurar solo el proyecto de API
+RUN dotnet restore ControlEstudiantesAPI/ControlEstudiantesAPI.csproj
 
-# Construir
-RUN dotnet build -c Release -o out
-
-# Publicar
-RUN dotnet publish -c Release -o out
+# Construir y publicar solo la API
+RUN dotnet publish ControlEstudiantesAPI/ControlEstudiantesAPI.csproj -c Release -o out
 
 # Etapa final
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
