@@ -2,16 +2,19 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copiar solo los proyectos necesarios (API y Core)
-COPY ControlEstudiantesAPI ./ControlEstudiantesAPI
-COPY ControlEscolarCore ./ControlEscolarCore
-COPY *.sln ./
+# Copiar toda la solución primero
+COPY . ./
 
-# Restaurar solo el proyecto de API
-RUN dotnet restore ControlEstudiantesAPI/ControlEstudiantesAPI.csproj
+# Listar los directorios para depuración
+RUN ls -la
 
-# Construir y publicar solo la API
-RUN dotnet publish ControlEstudiantesAPI/ControlEstudiantesAPI.csproj -c Release -o out
+# Intentar construir solo el proyecto API
+RUN find . -name "ControlEstudiantesAPI.csproj" -exec dotnet publish {} -c Release -o /app/out \;
+
+# Si lo anterior falla, intentar buscar la API por nombre
+RUN if [ ! -d /app/out ]; then \
+    find . -name "*.csproj" | grep -i api | xargs -I {} dotnet publish {} -c Release -o /app/out; \
+    fi
 
 # Etapa final
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
@@ -19,4 +22,9 @@ WORKDIR /app
 COPY --from=build /app/out .
 EXPOSE 80
 EXPOSE 443
-ENTRYPOINT ["dotnet", "ControlEstudiantesAPI.dll"]
+
+# Buscar el nombre exacto del DLL de la API
+RUN find . -name "*.dll" | grep -i api
+
+# Entrypoint dinámico que busca el archivo API.dll
+ENTRYPOINT ["sh", "-c", "dotnet $(find . -name \"*API.dll\" | head -1)"]
