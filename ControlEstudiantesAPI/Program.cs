@@ -1,20 +1,23 @@
 using ControlEscolarCore.Controller;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<EstudiantesController>();
 
-// En Program.cs (de tu proyecto API)
-// Agrega esta línea en la configuración
+// Configura manualmente la cadena de conexión para que ConfigurationManager pueda encontrarla
 builder.Configuration["ConexionBD"] = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// En Program.cs
+// Solo necesitamos esta línea, eliminando las variables intermedias que causan ambigüedad
+System.Configuration.ConfigurationManager.ConnectionStrings.Add(
+    new ConnectionStringSettings("ConexionBD",
+    builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Configuración de logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
@@ -29,7 +32,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
