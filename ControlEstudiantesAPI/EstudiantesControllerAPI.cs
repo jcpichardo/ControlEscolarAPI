@@ -9,11 +9,13 @@ namespace ControlEstudiantesAPI
     public class EstudiantesControllerAPI : ControllerBase
     {
         private readonly EstudiantesController _estudiantesController;
+        private readonly ILogger<EstudiantesControllerAPI> _logger;
 
 
-        public EstudiantesControllerAPI(EstudiantesController estudiantesController)
+        public EstudiantesControllerAPI(EstudiantesController estudiantesController, ILogger<EstudiantesControllerAPI> logger)
         {
             _estudiantesController = estudiantesController;
+            _logger = logger;
         }
 
         /// <summary>
@@ -43,6 +45,7 @@ namespace ControlEstudiantesAPI
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error al obtener estudiantes");
                 return StatusCode(500, "Error interno del servidor" + ex.Message);
             }
         }
