@@ -1,25 +1,23 @@
 # Etapa de construcción
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
+WORKDIR /app
 
-# Copiar csproj y restaurar dependencias
-COPY ["ControlEstudiantesAPI/ControlEstudiantesAPI.csproj", "ControlEstudiantesAPI/"]
-COPY ["ControlEscolarCore/ControlEscolarCore.csproj", "ControlEscolarCore/"]
-RUN dotnet restore "ControlEstudiantesAPI/ControlEstudiantesAPI.csproj"
+# Copiar toda la solución
+COPY . ./
 
-# Copiar todo y construir
-COPY . .
-WORKDIR "/src/ControlEstudiantesAPI"
-RUN dotnet build "ControlEstudiantesAPI.csproj" -c Release -o /app/build
+# Restaurar dependencias
+RUN dotnet restore
 
-# Etapa de publicación
-FROM build AS publish
-RUN dotnet publish "ControlEstudiantesAPI.csproj" -c Release -o /app/publish
+# Construir
+RUN dotnet build -c Release -o out
+
+# Publicar
+RUN dotnet publish -c Release -o out
 
 # Etapa final
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
+COPY --from=build /app/out .
 EXPOSE 80
 EXPOSE 443
-COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ControlEstudiantesAPI.dll"]
