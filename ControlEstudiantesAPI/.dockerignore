@@ -1,4 +1,5 @@
-﻿**/.classpath
+﻿# Archivos y carpetas generales a ignorar
+**/.classpath
 **/.dockerignore
 **/.env
 **/.git
@@ -12,13 +13,18 @@
 **/*.dbmdl
 **/*.jfm
 **/bin
+**/obj
 **/charts
 **/docker-compose*
 **/compose*
 **/Dockerfile*
 **/node_modules
 **/npm-debug.log
-**/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
 README.md
+
+# Ignorar específicamente el proyecto Windows Forms
+ControlEscolar/
+ControlEscolar.Tests/
+# Cualquier otro proyecto específico de Windows que no sea necesario para la API
