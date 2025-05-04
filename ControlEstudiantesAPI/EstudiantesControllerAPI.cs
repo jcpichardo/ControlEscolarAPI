@@ -26,7 +26,7 @@ namespace ControlEstudiantesAPI
         /// <param name="fechaInicio">Fecha inicial del rango</param>
         /// <param name="fechaFin">Fecha final del rango</param>
         /// <returns>Lista de estudiantes</returns>
-        [HttpGet]
+        [HttpGet("listado")]  // Ahora tiene una ruta específica
         public IActionResult GetEstudiantes(
             [FromQuery] bool soloActivos = true,
             [FromQuery] int tipoFecha = 0,
