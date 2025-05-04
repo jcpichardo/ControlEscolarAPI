@@ -1,7 +1,11 @@
 using ControlEscolarCore.Controller;
-using System.Configuration;
+using ControlEscolarCore.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configurar la cadena de conexión para PostgreSQLDataAccess
+PostgreSQLDataAccess.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 
@@ -10,18 +14,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<EstudiantesController>();
-
-// Configura manualmente la cadena de conexión para que ConfigurationManager pueda encontrarla
-builder.Configuration["ConexionBD"] = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Solo necesitamos esta línea, eliminando las variables intermedias que causan ambigüedad
-System.Configuration.ConfigurationManager.ConnectionStrings.Add(
-    new ConnectionStringSettings("ConexionBD",
-    builder.Configuration.GetConnectionString("DefaultConnection")));
-
-System.Configuration.ConfigurationManager.ConnectionStrings.Add(
-    new ConnectionStringSettings("ConexionBD",
-    builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // En Program.cs
 builder.Logging.ClearProviders();
